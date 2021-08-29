@@ -5,7 +5,7 @@ const PlayerScoreCard = ({ playerData, isSelected }) => {
     return (
 
         <tr>
-            <td style={{ verticalAlign: "center", textAlign:"center", backgroundColor: isSelected?"red":"white" }}>{playerData.playerName}</td>
+            <td style={{ verticalAlign: "center", textAlign:"center", backgroundColor: isSelected?"orange":"white" }}>{playerData.playerName}</td>
             {
                 playerData.frames.map((frame, index) => (                    
                     <td style={{ padding: 0 }} key={index}>

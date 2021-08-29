@@ -4,7 +4,7 @@ export default class MultiPlayerScoreBoard {
     constructor() {
         this.playerBoards = [];
         this.currentPlayer = 0;
-        this.pinState = [];      // pinState will be 1 for standing pins and 0 for dropped pins
+        this.pinState = [];      // pinState will be 1 for standing pins and 0 for dropped pins        
         this.gameComplete = false;
         this.resetPinState();
     }
@@ -19,7 +19,7 @@ export default class MultiPlayerScoreBoard {
         let newStandingPinCount = this.getStandingPins(newPinState)
         if (newStandingPinCount > prevStandingPinCount){
             console.log("Pin count should be lesser than available pins.")
-            alert("Pin count should be lesser than available pins.")
+            alert("Pin count should be lesser than available pins.")            
         } else {
             this.pinState = newPinState
             return prevStandingPinCount - newStandingPinCount
@@ -45,27 +45,29 @@ export default class MultiPlayerScoreBoard {
         }
     }
 
+    isValidScore(roundScore) {        
+        if (this.playerBoards[this.currentPlayer].isRunningFrameComplete()) return true
+        return (this.playerBoards[this.currentPlayer].getRunningFrameTotalScore() + roundScore) <= 10
+    }   
+
     updateRoundScore(roundScore) {
-        let isFrameComplete = this.playerBoards[this.currentPlayer].updateScore(roundScore)
-        let allPlayerComplete = true
+        let isFrameComplete = this.playerBoards[this.currentPlayer].updateScore(roundScore)        
         if (isFrameComplete) {
             this.resetPinState()            
             for(let i=0; i<this.playerBoards.length; ++i){
                 this.updateCurrentPlayer()
                 if (!this.playerBoards[this.currentPlayer].isGameComplete()){
-                    allPlayerComplete = false;
-                    break;
-                }
-            }            
-        }
-        if (allPlayerComplete){
-            this.gameComplete = true;
+                    this.gameComplete = false;
+                    return;
+                }                
+            }    
+            this.gameComplete = true
         }        
     }
 
     updateScoreWithPinSate(newPinState) {
         let roundScore = this.getRoundScore(newPinState);
         console.log("Round score" + roundScore)
-        return this.updateRoundScore(roundScore)
+        this.updateRoundScore(roundScore)
     }
 }

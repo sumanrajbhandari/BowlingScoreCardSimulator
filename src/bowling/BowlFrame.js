@@ -47,7 +47,8 @@ export default class BowlFrame {
         if(this.completedUpdateScoreCallCount === 0)
             this.round1 = pin_count
         if(this.completedUpdateScoreCallCount === 1)
-            this.round2 = pin_count
+            if (this.round1 + pin_count <= 10)
+                this.round2 = pin_count            
     }
 
     isFrameComplete(){

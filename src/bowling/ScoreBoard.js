@@ -7,7 +7,17 @@ export default class ScoreBoard {
             this.frames.push(new BowlFrame(i + 1))
         }
         this.runningFrame = 0      
-    }    
+    }
+    
+    getRunningFrameTotalScore()
+    {
+        return this.frames[this.runningFrame].getFrameScore()
+    }
+
+    isRunningFrameComplete()
+    {
+        return this.frames[this.runningFrame].isFrameComplete()
+    }
 
     updateFrameScore(frameNumber, roundScore) {
         if (frameNumber<0) return;
