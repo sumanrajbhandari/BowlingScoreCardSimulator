@@ -61,6 +61,20 @@ export default class BowlFrame {
         return this.round1 + this.round2 + this.bonus1 + this.bonus2
     }        
 
+    getFrameScoreDisplay() {
+        if (this.completedUpdateScoreCallCount >= 1){
+            return this.getFrameScore()
+        } else {
+            return ""
+        }
+    }
+
+    getTotalScoreColor() {
+        if (this.isFrameComplete() && !this.isScoreComplete()) return "yellow"
+        if (this.isScoreComplete()) return "green"
+        return "white"
+    }
+
     isScoreComplete(){
         if (this.isStrike() && this.completedUpdateScoreCallCount >= 3)
             return true

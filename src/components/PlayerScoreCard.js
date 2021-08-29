@@ -1,13 +1,11 @@
 import React from 'react'
 import { useState } from 'react'
 
-const PlayerScoreCard = ({ playerData }) => {
-    //const frameData = playerData.frames.map((frame) => )
-    const [cumulativeScore, setcumulativeScore] = useState([])
+const PlayerScoreCard = ({ playerData, isSelected }) => {        
     return (
 
         <tr>
-            <td style={{ padding: 0 }}>{playerData.playerName}</td>
+            <td style={{ verticalAlign: "center", textAlign:"center", backgroundColor: isSelected?"red":"white" }}>{playerData.playerName}</td>
             {
                 playerData.frames.map((frame, index) => (                    
                     <td style={{ padding: 0 }} key={index}>
@@ -22,14 +20,14 @@ const PlayerScoreCard = ({ playerData }) => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2" align="center">{cumulativeScore}&nbsp;</td>
+                                    <td colSpan="2" style={{backgroundColor: frame.getTotalScoreColor()}} align="center">{frame.getFrameScoreDisplay()}&nbsp;</td>
                                 </tr>
                             </tbody>
                         </table>
                     </td>
-
-                ))
+                ))                
             }
+            <td>{playerData.getTotalScore()}</td>
         </tr>
 
     )

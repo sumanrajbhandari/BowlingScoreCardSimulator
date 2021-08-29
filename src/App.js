@@ -1,11 +1,14 @@
 import Header from './components/Header'
-import ScoreBoard from './components/ScoreBoard'
+import ScoreBoard from './bowling/ScoreBoard'
 import PlayerScoreCard from './components/PlayerScoreCard';
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import MultiPlayerScoreBoard from './bowling/MultiPlayerScoreBoard';
 
 function App() {
-  const [players, setPlayers] = useState([])
+  //const multiBoard = new MultiPlayerScoreBoard()
+  const [multiBoard, setMultiBoard] = useState(new MultiPlayerScoreBoard())
+  //const [players, setPlayers] = useState([])
   const [pinStatus, setPinStatus] = useState([])
   //const [playerName, setPlayerName] = useState(false)
   const [state, setState] = useState({
@@ -15,10 +18,18 @@ function App() {
   //let playerName
   let gameStarted
 
+  // function getClonedBoard() {
+  //   return Object.assign(Object.create(Object.getPrototypeOf(multiBoard)), multiBoard)
+  // }
+
+  function updateBoardState() {
+    setMultiBoard(Object.assign(Object.create(Object.getPrototypeOf(multiBoard)), multiBoard))
+  }
+
   function addPlayer() {
-    setPlayers([...players, new ScoreBoard(state.playerName)])
-    setState({ ...state, playerName: "" })
-    //setPlayerName("")
+    multiBoard.addPlayer(state.playerName)
+    updateBoardState()    
+    setState({ ...state, playerName: "" })    
   }
 
   function startGame() {
@@ -32,7 +43,7 @@ function App() {
 
 
   function canStartGame() {
-    if (players.length > 0)
+    if (multiBoard.playerBoards !== undefined && multiBoard.playerBoards.length > 0)
       return true
     else
       return false
@@ -40,22 +51,30 @@ function App() {
 
   function updateScore() {
     console.log("New pin state = " + pinStatus)
+    let error = false;
+    if (pinStatus.length === 10)
+    {
+      let pins = [...pinStatus]
+      let pinArray = pins.map(pin=>{
+        if (pin == '0' || pin == '1') {
+          return Number(pin)
+        } else {
+          alert("Invalid pin input")
+          error = true
+        }
+      })
+      if (!error) {
+        multiBoard.updateScoreWithPinSate(pinArray)
+        updateBoardState()        
+      }      
+    } else {
+      alert("Pin State should be represented by 10: 1 and 0")
+    }   
   }
 
   function startGame() {
     console.log("Game Started")
-    setState({ ...state, gameStarted: true })
-    // let playersList = players.map((plr, index) => {
-    //   if (index === 0) {
-    //     let updatedItem = Object.assign(Object.create(Object.getPrototypeOf(plr)), plr)
-    //     updatedItem.frames[0].updateScore(5)
-    //     return updatedItem
-    //   }
-    //   else {
-    //     return plr
-    //   }
-    // })    
-    //setPlayers({ ...playersList })
+    setState({ ...state, gameStarted: true })    
   }
 
 
@@ -91,8 +110,8 @@ function App() {
         </thead>
         <tbody>
           {
-            players.map((player) => (
-              <PlayerScoreCard key={player.playerName} playerData={player}></PlayerScoreCard>
+            multiBoard.playerBoards.map((player, index) => (
+              <PlayerScoreCard key={player.playerName} playerData={player} isSelected={index === multiBoard.currentPlayer}></PlayerScoreCard>
             ))}
         </tbody>
 
@@ -102,6 +121,7 @@ function App() {
         <input disabled={!state.gameStarted} type="text" value={pinStatus} onChange={(e) => setPinStatus(e.target.value)}></input>
         <button disabled={!state.gameStarted} className="btn btn-primary" onClick={updateScore}>Update Score</button>
       </div>
+      <div style={{display: multiBoard.gameComplete ? "block": "none", textAlign:"center"}}><h1>Thanks for playing. Game End. Refresh to start new Game.</h1></div>
     </div>
   );
 }
