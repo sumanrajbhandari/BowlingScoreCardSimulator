@@ -13,9 +13,9 @@ Builds the app for production to the `build` folder.
 <hr />
 
 ## Source Code
-All the source code is insite /src folder. It 2 main directories
+All the source code is inside /src folder. It has 2 main directories
 ### `/src/bowling`
-This folder contains the algorithm for mainting the scorecard.
+This folder contains the algorithm for maintaing the scorecard.
 #### `BowlFrame.js`
 This class represents a single frame in the score board. 
 #### `ScoreBoard.js`
@@ -25,7 +25,7 @@ This class handles multiple players and switing between them.
 
 
 ### `src/components`
-This consists the presentation components for the score board.
+This folder consists the presentation components for the score board.
 
 ### `src/App.js`
 This is the starting point of app. Handles the state and user interactions. 
