@@ -14,11 +14,19 @@ export default class BowlFrame {
         return ""        
     }
 
-    round2Display() {        
+    round2Display() {
+        if(this.frameNumber === 10 && this.isStrike() && this.completedUpdateScoreCallCount >= 2) return this.bonus1        
         if (this.isSpare()) return "/"
         if (this.isStrike()) return ""
         if (this.completedUpdateScoreCallCount >= 2) return this.round2
         return ""
+    }
+
+    lastFrameThirdBowl() {
+        if(this.frameNumber === 10){
+            if (this.isSpare() && this.completedUpdateScoreCallCount >=3) return this.bonus1
+            if (this.isStrike() && this.completedUpdateScoreCallCount >=3) return this.bonus2
+        }
     }
 
     isStrike(){

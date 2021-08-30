@@ -40,7 +40,7 @@ export default class MultiPlayerScoreBoard {
     
     updateCurrentPlayer(){
         this.currentPlayer = this.currentPlayer + 1;
-        if (this.playerBoards.length == this.currentPlayer) {
+        if (this.playerBoards.length === this.currentPlayer) {
             this.currentPlayer = 0                    
         }
     }

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 
 const PlayerScoreCard = ({ playerData, isSelected }) => {        
     return (
@@ -17,10 +16,11 @@ const PlayerScoreCard = ({ playerData, isSelected }) => {
                                     </td>
                                     <td align="center">
                                         {frame.round2Display()}&nbsp;
-                                    </td>
+                                    </td>   
+                <td style={{display: index === 9 ? "block" : "none"}}>{frame.lastFrameThirdBowl()}</td>                                 
                                 </tr>
                                 <tr>
-                                    <td colSpan="2" style={{backgroundColor: frame.getTotalScoreColor()}} align="center">{frame.getFrameScoreDisplay()}&nbsp;</td>
+                                    <td colSpan={index === 9 ? 3 : 2} style={{backgroundColor: frame.getTotalScoreColor()}} align="center">{frame.getFrameScoreDisplay()}&nbsp;</td>
                                 </tr>
                             </tbody>
                         </table>

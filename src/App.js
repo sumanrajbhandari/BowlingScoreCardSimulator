@@ -3,12 +3,13 @@ import PlayerScoreCard from './components/PlayerScoreCard';
 import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MultiPlayerScoreBoard from './bowling/MultiPlayerScoreBoard';
+import React from 'react';
 
-function App() {
+
+function App() {  
   const [multiBoard, setMultiBoard] = useState(new MultiPlayerScoreBoard())
   const [pinStatus, setPinStatus] = useState([])
   const [roundScore, setRoundScore] = useState()
-  const [inputTab, setInputTab] = useState(1)
   const [errorMessage, setErrorMessage] = useState("")
   const [state, setState] = useState({
     playerName: "",
@@ -28,7 +29,7 @@ function App() {
     } else {
       //setErrorMessage("Enter Player Name to add new player. ")
       setErrorMessage("Enter Player Name to add new player. ")
-    }    
+    }
   }
 
   function updatePlayerName(name) {
@@ -66,8 +67,8 @@ function App() {
     }
   }
 
-  function updateRoundScore() {    
-    if(roundScore === undefined){
+  function updateRoundScore() {
+    if (roundScore === undefined) {
       setErrorMessage("Round Score value should be between 1 to 10.")
       return;
     }
@@ -81,7 +82,7 @@ function App() {
       updateBoardState()
       setErrorMessage("")
     } else {
-      setErrorMessage("Invalid score. Sum of round 1 and round 2 score should be less than 10")
+      setErrorMessage("Invalid score. Round score should be less than or equal to remaining available pins.")
     }
   }
 
@@ -92,61 +93,63 @@ function App() {
   }
 
   return (
-    <div className="App" className="container">
+    <div className="App, container">
       <Header />
-      <div disabled={state.gameStarted}>
-        <label>Player Name: &nbsp;</label>
-        <input disabled={state.gameStarted} type="text" value={state.playerName} onChange={(e) => updatePlayerName(e.target.value)}></input>
+      <React.StrictMode>
+        <div disabled={state.gameStarted}>
+          <label>Player Name: &nbsp;</label>
+          <input disabled={state.gameStarted} type="text" value={state.playerName} onChange={(e) => updatePlayerName(e.target.value)}></input>
         &nbsp;&nbsp;
         <button disabled={state.gameStarted} className="btn btn-primary" onClick={addPlayer}>Add Player</button>&nbsp;&nbsp;
         <button disabled={!canStartGame() || state.gameStarted} className="btn btn-primary" onClick={startGame}>Start Game with selected Players</button>
-      </div>
+        </div>
 
-      <div style={{ marginTop: 20, alignSelf: "center" }}></div>
+        <div style={{ marginTop: 20, alignSelf: "center" }}></div>
 
-      <div style={{ marginTop: 30 }}></div>
-      <div style={{ display: errorMessage === "" ? "none" : "inline" }} className="container alert alert-danger" role="alert">
-        {errorMessage}
-      </div>
-      <div style={{ marginTop: 30 }}></div>
-      <table className="table table-bordered">
-        <thead>
+        <div style={{ marginTop: 30 }}></div>
+        <div style={{ display: errorMessage === "" ? "none" : "inline" }} className="container alert alert-danger" role="alert">
+          {errorMessage}
+        </div>
+        <div style={{ marginTop: 30 }}></div>
+        <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+              <th>6</th>
+              <th>7</th>
+              <th>8</th>
+              <th>9</th>
+              <th>10</th>
+              <th>Total Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              multiBoard.playerBoards.map((player, index) => (
+                <PlayerScoreCard key={player.playerName} playerData={player} isSelected={index === multiBoard.currentPlayer}></PlayerScoreCard>
+              ))}
+          </tbody>
+        </table>
+        <table>
           <tr>
-            <th>Name</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8</th>
-            <th>9</th>
-            <th>10</th>
-            <th>Total Score</th>
+            <td style={{ textAlign: "right" }}> Round Score: </td>
+            <td><input placeholder="0 to 10" disabled={!state.gameStarted} type="number" value={roundScore} onChange={(e) => setRoundScore(e.target.value)}></input></td>
+            <td><button disabled={!state.gameStarted} className="btn btn-primary" onClick={updateRoundScore}>Update Score</button>&nbsp;&nbsp;</td>
           </tr>
-        </thead>
-        <tbody>
-          {
-            multiBoard.playerBoards.map((player, index) => (
-              <PlayerScoreCard key={player.playerName} playerData={player} isSelected={index === multiBoard.currentPlayer}></PlayerScoreCard>
-            ))}
-        </tbody>
-      </table>
-      <table>
-        <tr>
-          <td style={{ textAlign: "right" }}> Round Score: </td>
-          <td><input placeholder="0 to 10" disabled={!state.gameStarted} type="number" value={roundScore} onChange={(e) => setRoundScore(e.target.value)}></input></td>
-          <td><button disabled={!state.gameStarted} className="btn btn-primary" onClick={updateRoundScore}>Update Score</button>&nbsp;&nbsp;</td>
-        </tr>
-        <tr>
-          <td>Pin State:</td>
-          <td><input placeholder="1111111111" disabled={!state.gameStarted} type="number" value={pinStatus} onChange={(e) => setPinStatus(e.target.value)}></input></td>
-          <td><button disabled={!state.gameStarted} className="btn btn-primary" onClick={updateScore}>Update Score</button></td>
-        </tr>
-      </table>
+          <tr>
+            <td>Pin State:</td>
+            <td><input placeholder="1111111111" disabled={!state.gameStarted} type="number" value={pinStatus} onChange={(e) => setPinStatus(e.target.value)}></input></td>
+            <td><button disabled={!state.gameStarted} className="btn btn-primary" onClick={updateScore}>Update Score</button></td>
+          </tr>
+        </table>
 
-      <div style={{ marginTop: 50, display: multiBoard.gameComplete ? "block" : "none", textAlign: "center" }}><h3>Thanks for playing. Game End. Refresh to start new Game.</h3></div>
+        <div style={{ marginTop: 50, display: multiBoard.gameComplete ? "block" : "none", textAlign: "center" }}><h3>Thanks for playing. Game End. Refresh to start new Game.</h3></div>
+      </React.StrictMode>
     </div>
   );
 }
