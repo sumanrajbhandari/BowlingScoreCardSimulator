@@ -1,12 +1,12 @@
 import React from 'react'
 
-const PlayerScoreCard = ({ playerData, isSelected }) => {        
+const PlayerScoreCard = ({ playerData, isSelected }) => {
     return (
 
         <tr>
-            <td style={{ verticalAlign: "center", textAlign:"center", backgroundColor: isSelected?"orange":"white" }}>{playerData.playerName}</td>
+            <td style={{ verticalAlign: "center", textAlign: "center", backgroundColor: isSelected ? "orange" : "white" }}>{playerData.playerName}</td>
             {
-                playerData.frames.map((frame, index) => (                    
+                playerData.frames.map((frame, index) => (
                     <td style={{ padding: 0 }} key={index}>
                         <table className="table table-bordered" style={{ margin: 0 }}>
                             <tbody>
@@ -16,16 +16,16 @@ const PlayerScoreCard = ({ playerData, isSelected }) => {
                                     </td>
                                     <td align="center">
                                         {frame.round2Display()}&nbsp;
-                                    </td>   
-                <td style={{display: index === 9 ? "block" : "none"}}>{frame.lastFrameThirdBowl()}</td>                                 
+                                    </td>
+                                    <td style={{ display: index === 9 ? "block" : "none" }}>{frame.lastFrameThirdBowl()}</td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={index === 9 ? 3 : 2} style={{backgroundColor: frame.getTotalScoreColor()}} align="center">{frame.getFrameScoreDisplay()}&nbsp;</td>
+                                    <td colSpan={index === 9 ? 3 : 2} style={{ backgroundColor: frame.getTotalScoreColor() }} align="center">{frame.getFrameScoreDisplay()}&nbsp;</td>
                                 </tr>
                             </tbody>
                         </table>
                     </td>
-                ))                
+                ))
             }
             <td>{playerData.getTotalScore()}</td>
         </tr>
