@@ -67,13 +67,13 @@ export default class MultiPlayerScoreBoard {
 
     updateRoundScore(roundScore) {
         let isFrameComplete = this.currentPlayerBoard().updateScore(roundScore)        
-        if (isFrameComplete) {
+        if (isFrameComplete) {            
             if (this.currentPlayerBoard().isLastFrame() && this.currentPlayerBoard().currentFrame().isFrameComplete()){
                 // if it is the last frame do not switch player till score is complete
                 if (this.currentPlayerBoard().currentFrame().isScoreComplete()){
                     this.switchPlayer()
                 }
-
+                this.resetPinState()
             } else {
                 this.resetPinState()            
                 this.switchPlayer()
