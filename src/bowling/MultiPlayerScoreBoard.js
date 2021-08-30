@@ -45,23 +45,39 @@ export default class MultiPlayerScoreBoard {
         }
     }
 
+    currentPlayerBoard() {
+        return this.playerBoards[this.currentPlayer];
+    }
+
     isValidScore(roundScore) {        
-        if (this.playerBoards[this.currentPlayer].isRunningFrameComplete()) return true
-        return (this.playerBoards[this.currentPlayer].getRunningFrameTotalScore() + roundScore) <= 10
-    }   
+        if (this.currentPlayerBoard().isRunningFrameComplete()) return true
+        return (this.currentPlayerBoard().getRunningFrameTotalScore() + roundScore) <= 10
+    } 
+    
+    switchPlayer() {
+        for(let i=0; i<this.playerBoards.length; ++i){
+            this.updateCurrentPlayer()
+            if (!this.playerBoards[this.currentPlayer].isGameComplete()){
+                this.gameComplete = false;
+                return;
+            }                
+        }    
+        this.gameComplete = true        
+    }
 
     updateRoundScore(roundScore) {
-        let isFrameComplete = this.playerBoards[this.currentPlayer].updateScore(roundScore)        
+        let isFrameComplete = this.currentPlayerBoard().updateScore(roundScore)        
         if (isFrameComplete) {
-            this.resetPinState()            
-            for(let i=0; i<this.playerBoards.length; ++i){
-                this.updateCurrentPlayer()
-                if (!this.playerBoards[this.currentPlayer].isGameComplete()){
-                    this.gameComplete = false;
-                    return;
-                }                
-            }    
-            this.gameComplete = true
+            if (this.currentPlayerBoard().isLastFrame() && this.currentPlayerBoard().currentFrame().isFrameComplete()){
+                // if it is the last frame do not switch player till score is complete
+                if (this.currentPlayerBoard().currentFrame().isScoreComplete()){
+                    this.switchPlayer()
+                }
+
+            } else {
+                this.resetPinState()            
+                this.switchPlayer()
+            }            
         }        
     }
 

@@ -8,6 +8,15 @@ export default class ScoreBoard {
         }
         this.runningFrame = 0      
     }
+
+    isLastFrame()
+    {
+        return this.runningFrame === 9
+    }
+
+    currentFrame() {
+        return this.frames[this.runningFrame]
+    }
     
     getRunningFrameTotalScore()
     {
@@ -28,6 +37,7 @@ export default class ScoreBoard {
         return this.runningFrame === 9 && this.frames[this.runningFrame].isScoreComplete()
     }
 
+    // update score in the frame and returns if frame is complete or not.
     updateScore(roundScore) {
         if (this.isGameComplete()){
             console.log("Game for player " + this.playerName + "is complete")
